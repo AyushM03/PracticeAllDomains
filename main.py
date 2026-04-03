@@ -21,17 +21,35 @@ app = FastAPI()
 #Otherwise, the path for /users/{user_id} would match also for /users/me,
 #  "thinking" that it's receiving a parameter user_id with a value of "me".
 
+#code 
+# @app.get("/users/me")
+# async def read_user_me():
+#     return {"user_id": "the current user"}
 
-@app.get("/users/me")
-async def read_user_me():
-    return {"user_id": "the current user"}
-
-@app.get("/users/{user_id}")
-async def read_user(user_id: str):
-    return {"user_id": user_id}
+# @app.get("/users/{user_id}")
+# async def read_user(user_id: str):
+#     return {"user_id": user_id}
 
 #Similarly, you cannot redefine a path operation:
 
+#------------------------------------------------
+# if u want a predefined values we can use Enum CLASS 
 
 
+from enum import Enum
 
+class ModelName(str, Enum):
+    alexnet = "alexnet"
+    resnet = "resnet"
+    lenet = "lenet"
+
+
+@app.get("/models/{model_name}")
+async def get_model(model_name: ModelName):
+    if model_name == ModelName.alexnet:
+        return {"model_name": model_name, "message": "Deep Learning FTW!"}
+
+    if model_name.value == "lenet":
+        return {"model_name": model_name, "message": "LeCNN all the images"}
+
+    return {"model_name": model_name, "message": "Have some residuals"}
