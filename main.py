@@ -36,20 +36,49 @@ app = FastAPI()
 # if u want a predefined values we can use Enum CLASS 
 
 
-from enum import Enum
+#Code
+# from enum import Enum
 
-class ModelName(str, Enum):
-    alexnet = "alexnet"
-    resnet = "resnet"
-    lenet = "lenet"
+# class ModelName(str, Enum):
+#     alexnet = "alexnet"
+#     resnet = "resnet"
+#     lenet = "lenet"
 
 
-@app.get("/models/{model_name}")
-async def get_model(model_name: ModelName):
-    if model_name == ModelName.alexnet:
-        return {"model_name": model_name, "message": "Deep Learning FTW!"}
+# @app.get("/models/{model_name}")
+# async def get_model(model_name: ModelName):
+#     if model_name == ModelName.alexnet:
+#         return {"model_name": model_name, "message": "Deep Learning FTW!"}
 
-    if model_name.value == "lenet":
-        return {"model_name": model_name, "message": "LeCNN all the images"}
+#     if model_name.value == "lenet":
+#         return {"model_name": model_name, "message": "LeCNN all the images"}
 
-    return {"model_name": model_name, "message": "Have some residuals"}
+#     return {"model_name": model_name, "message": "Have some residuals"}
+
+
+#------------------------------------------------------------------------
+
+
+#query parameters
+
+#when we declare a parameter that is not part of the path,
+#  it will be automatically interpreted as a "query" parameter.
+
+# @app.get("/items/{items_id}")
+# async def read_items(items_id:int, q:str=None):
+#     if q:
+#         return {"items_id": items_id, "q": "this is working"}
+#     return {"items_id": items_id}
+
+
+@app.get("/items/{items_id}/users/{users_id}")
+async def read_items_users(items_id: int, users_id: str, q: str = None, short: bool = False):
+    result = {"items_id": items_id, "users_id": users_id}
+    if q:
+        result.update({"q": q})
+
+    if not short:
+        result.update(
+            {"description": "This is an amazing item that has a long description"}
+        )
+    return result
