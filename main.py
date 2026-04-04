@@ -1,6 +1,6 @@
-from fastapi import FastAPI
+# from fastapi import FastAPI
 
-app = FastAPI()
+# app = FastAPI()
 
 
 #we can also specify the type of the path parameter,
