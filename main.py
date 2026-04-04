@@ -71,14 +71,16 @@ app = FastAPI()
 #     return {"items_id": items_id}
 
 
-@app.get("/items/{items_id}/users/{users_id}")
-async def read_items_users(items_id: int, users_id: str, q: str = None, short: bool = False):
-    result = {"items_id": items_id, "users_id": users_id}
-    if q:
-        result.update({"q": q})
+# @app.get("/items/{items_id}/users/{users_id}")
+# async def read_items_users(items_id: int, users_id: str, q: str = None, short: bool = False):
+#     result = {"items_id": items_id, "users_id": users_id}
+#     if q:
+#         result.update({"q": q})
 
-    if not short:
-        result.update(
-            {"description": "This is an amazing item that has a long description"}
-        )
-    return result
+#     if not short:
+#         result.update(
+#             {"description": "This is an amazing item that has a long description"}
+#         )
+#     return result
+
+
