@@ -122,19 +122,47 @@
 #     return results
 
 #-------------------------------------------------------------------
-from typing import Annotated, Literal
-from fastapi import FastAPI, Query, Path
-from pydantic import BaseModel, Field
+# from typing import Annotated, Literal
+# from fastapi import FastAPI, Query, Path
+# from pydantic import BaseModel, Field
+# app=FastAPI()
+
+# class FilterParams(BaseModel):
+#     limit: int = Field(100, ge=0,le=100)
+#     offset: int = Field(0, ge=0)
+#     order_by: Literal["created_at", "updated_at"] = "created_at"
+#     tags: list[str] = []
+
+# @app.get("/items/")
+# async def read_items(
+#     filters_query: Annotated[FilterParams, Query()]
+# ):
+#     return filters_query
+
+
+#-----------------------------------
+#mix query , path and request body parameters in the same path operation function
+
+from fastapi import FastAPI, Path
+from pydantic import BaseModel
+from typing import Annotated
+
 app=FastAPI()
 
-class FilterParams(BaseModel):
-    limit: int = Field(100, ge=0,le=100)
-    offset: int = Field(0, ge=0)
-    order_by: Literal["created_at", "updated_at"] = "created_at"
-    tags: list[str] = []
+class Item(BaseModel):
+    name: str
+    description: str | None = None
+    price: float
+    tax: float | None = None
 
-@app.get("/items/")
-async def read_items(
-    filters_query: Annotated[FilterParams, Query()]
-):
-    return filters_query
+@app.put("/items/{item_id}")
+async def update_item(
+    item_id:Annotated[int,Path(title="The ID of the item to get",ge=0,le=100)],
+    q:str | None=None,
+    item: Item | None= None,):
+    result={"item_id": item_id}
+    if q:
+        result.update({"q": q})
+    if item:
+        result.update({"item": item})
+    return result
