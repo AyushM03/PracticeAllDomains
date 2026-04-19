@@ -169,25 +169,52 @@
 
 
 
-from fastapi import FastAPI
-from pydantic import BaseModel
+# from fastapi import FastAPI
+# from pydantic import BaseModel
+
+# app = FastAPI()
+
+
+# class Item(BaseModel):
+#     name: str
+#     description: str | None = None
+#     price: float
+#     tax: float | None = None
+
+
+# class User(BaseModel):
+#     username: str
+#     full_name: str | None = None
+
+
+# @app.put("/items/{item_id}")
+# async def update_item(item_id: int, item: Item, user: User):
+#     results = {"item_id": item_id, "item": item, "user": user}
+#     return results
+
+
+#---------------------------------------------------
+#field 
+
+
+from typing import Annotated
+
+from fastapi import Body, FastAPI
+from pydantic import BaseModel, Field
 
 app = FastAPI()
 
 
 class Item(BaseModel):
     name: str
-    description: str | None = None
-    price: float
+    description: str | None = Field(
+        default=None, title="The description of the item", max_length=300
+    )
+    price: float = Field(gt=0, description="The price must be greater than zero")
     tax: float | None = None
 
 
-class User(BaseModel):
-    username: str
-    full_name: str | None = None
-
-
 @app.put("/items/{item_id}")
-async def update_item(item_id: int, item: Item, user: User):
-    results = {"item_id": item_id, "item": item, "user": user}
+async def update_item(item_id: int, item: Annotated[Item, Body(embed=True)]):
+    results = {"item_id": item_id, "item": item}
     return results
