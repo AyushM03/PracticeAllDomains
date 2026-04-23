@@ -223,3 +223,5 @@ async def update_item(item_id: int, item: Annotated[Item, Body(embed=True)]):
 
 
 # today i revised all things from scratch.
+
+#creating setup for the mongodb motor and installing remaining packages today
